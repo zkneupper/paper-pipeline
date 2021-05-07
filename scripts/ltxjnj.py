@@ -4,7 +4,6 @@
 
 # Python standard library
 import pathlib
-import subprocess
 
 # External packages
 import jinja2
