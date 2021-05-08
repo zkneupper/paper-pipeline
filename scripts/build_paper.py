@@ -5,13 +5,12 @@
 # Python standard library
 import pathlib
 import shutil
-import subprocess
 
 # External packages
 import jinja2
 
 # Internal modules
-import ltxjnj
+import paper_pipeline_funcs
 
 
 def main():
@@ -29,15 +28,14 @@ def main():
 
     assert file_path_dir_templates.exists()
 
-    latex_jinja_env = ltxjnj.get_jinja_environment_for_latex(
+    latex_jinja_env = paper_pipeline_funcs.get_jinja_environment_for_latex(
         searchpath=file_path_dir_templates,
     )
 
     template = latex_jinja_env.get_template(file_name_latex_template)
 
-    # template_rendered = template.render(author_1="Author 1", author_2="Author 1")
-    template_rendered = template.render()
-    # print(template_rendered)
+    # template_rendered = template.render()
+    template_rendered = template.render(author_1="Author 1", author_2="Author 2")
 
     if file_path_dir_build.exists():
         shutil.rmtree(file_path_dir_build)
@@ -45,30 +43,20 @@ def main():
     # shutil.copytree(src, dest)
     shutil.copytree(file_path_dir_templates, file_path_dir_build)
 
-    print(f"file_path_rendered_template: {file_path_rendered_template}")
-
     with open(file_path_rendered_template, "w") as f:
         f.write(template_rendered)
 
     assert file_path_rendered_template.exists()
 
-    # Commands
+    print(f"file_path_rendered_template: {file_path_rendered_template}")
 
     # build pdf
-    cmd_cd = f"cd {str(file_path_dir_build)}"
-    cmd_pdflatex = f"pdflatex {str(file_path_rendered_template)}"
-    cmd_pdflatex = cmd_cd + " && " + cmd_pdflatex
-    print(f"Executing:\n$ {cmd_pdflatex}\n...")
-    subprocess.run(cmd_pdflatex, shell=True)
+    paper_pipeline_funcs.compile_latex_to_pdf(file_path_rendered_template)
 
     # open pdf
     file_path_rendered_pdf = file_path_rendered_template.with_suffix(".pdf")
-
     assert file_path_rendered_pdf.exists()
-
-    cmd_open_pdf = f"open {str(file_path_rendered_pdf)}"
-    print(f"Executing:\n$ {cmd_open_pdf}\n...")
-    subprocess.run(cmd_open_pdf, shell=True)
+    paper_pipeline_funcs.open_pdf(file_path_rendered_pdf)
 
 
 if __name__ == "__main__":

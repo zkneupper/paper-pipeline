@@ -4,6 +4,7 @@
 
 # Python standard library
 import pathlib
+import subprocess
 
 # External packages
 import jinja2
@@ -34,3 +35,27 @@ def get_jinja_environment_for_latex(searchpath=None):
     )
 
     return latex_jinja_env
+
+
+def compile_latex_to_pdf(file_path_tex, verbose=False):
+    pass
+    """Builds pdf from latex file using `pdflatex` command."""
+    file_path_tex_parent_dir = file_path_tex.parent
+    cmd_cd = f"cd {str(file_path_tex_parent_dir)}"
+    cmd_pdflatex = f"pdflatex {str(file_path_tex)}"
+    cmd_pdflatex = cmd_cd + " && " + cmd_pdflatex
+
+    if verbose:
+        print(f"Executing:\n$ {cmd_pdflatex}\n...")
+
+    subprocess.run(cmd_pdflatex, shell=True)
+
+
+def open_pdf(file_path_pdf, verbose=False):
+    """Opens pdf in default pdf viewer application."""
+    cmd_open_pdf = f"open {str(file_path_pdf)}"
+
+    if verbose:
+        print(f"Executing:\n$ {cmd_open_pdf}\n...")
+
+    subprocess.run(cmd_open_pdf, shell=True)
