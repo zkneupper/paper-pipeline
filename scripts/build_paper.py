@@ -15,13 +15,21 @@ import ltxjnj
 
 def main():
 
-    build_dir = "build"
+    file_name_latex_template = "template.tex"
+    dir_templates = "templates"
+    dir_build = "build"
 
     file_path_project_root = pathlib.Path("__file__").absolute().parents[1]
+    file_path_dir_templates = file_path_project_root / dir_templates
+    file_path_dir_build = file_path_project_root / dir_build
+    file_path_dir_build.mkdir(parents=True, exist_ok=True)
 
-    file_path_build_dir = file_path_project_root / build_dir
+    assert file_path_dir_templates.exists()
 
-    file_path_build_dir.mkdir(parents=True, exist_ok=True)
+    latex_jinja_env = ltxjnj.get_jinja_environment_for_latex(
+        searchpath=file_path_dir_templates,
+    )
+    template = latex_jinja_env.get_template(file_name_latex_template)
 
 
 if __name__ == "__main__":
