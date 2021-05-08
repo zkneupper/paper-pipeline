@@ -19,9 +19,6 @@ def get_jinja_environment_for_latex(searchpath=None):
     >>> template = latex_jinja_env.get_template(file_name_latex_template)
     """
 
-    searchpath = pathlib.Path(searchpath).absolute()
-    assert searchpath.exists(), f"searchpath `{searchpath}` does not exist."
-
     latex_jinja_env = jinja2.Environment(
         block_start_string="\BLOCK{",
         block_end_string="}",
