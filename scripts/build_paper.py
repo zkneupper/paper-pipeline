@@ -52,6 +52,24 @@ def main():
 
     assert file_path_rendered_template.exists()
 
+    # Commands
+
+    # build pdf
+    cmd_cd = f"cd {str(file_path_dir_build)}"
+    cmd_pdflatex = f"pdflatex {str(file_path_rendered_template)}"
+    cmd_pdflatex = cmd_cd + " && " + cmd_pdflatex
+    print(f"Executing:\n$ {cmd_pdflatex}\n...")
+    subprocess.run(cmd_pdflatex, shell=True)
+
+    # open pdf
+    file_path_rendered_pdf = file_path_rendered_template.with_suffix(".pdf")
+
+    assert file_path_rendered_pdf.exists()
+
+    cmd_open_pdf = f"open {str(file_path_rendered_pdf)}"
+    print(f"Executing:\n$ {cmd_open_pdf}\n...")
+    subprocess.run(cmd_open_pdf, shell=True)
+
 
 if __name__ == "__main__":
     main()
