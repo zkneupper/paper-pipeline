@@ -17,12 +17,15 @@ import ltxjnj
 def main():
 
     file_name_latex_template = "template.tex"
+    file_name_rendered_template = "template_rendered.tex"
+
     dir_templates = "templates"
     dir_build = "build"
 
     file_path_project_root = pathlib.Path("__file__").absolute().parents[1]
     file_path_dir_templates = file_path_project_root / dir_templates
     file_path_dir_build = file_path_project_root / dir_build
+    file_path_rendered_template = file_path_dir_build / file_name_rendered_template
 
     assert file_path_dir_templates.exists()
 
@@ -41,6 +44,13 @@ def main():
 
     # shutil.copytree(src, dest)
     shutil.copytree(file_path_dir_templates, file_path_dir_build)
+
+    print(f"file_path_rendered_template: {file_path_rendered_template}")
+
+    with open(file_path_rendered_template, "w") as f:
+        f.write(template_rendered)
+
+    assert file_path_rendered_template.exists()
 
 
 if __name__ == "__main__":
